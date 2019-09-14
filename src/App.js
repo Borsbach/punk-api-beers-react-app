@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { thisExpression } from "@babel/types";
+import Beer from './components/Beer';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    beers: []
+  };
+
+  componentDidMount() {
+    fetch("https://api.punkapi.com/v2/beers")
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ beers: data });
+      });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        {this.state.beers.map(b => {
+          return <Beer beer={b} />;
+        })}
+      </div>
+    );
+  }
 }
 
 export default App;
